@@ -21,8 +21,8 @@ __global__ void MatmulSharedStaticKernel(float *M_device, float *N_device, float
     int tx = threadIdx.x;
     /* 对于每一个P的元素，我们只需要循环遍历width / tile_width 次就okay了，这里有点绕，画图理解一下*/
     for (int m = 0; m < width / BLOCKSIZE; m ++) {
-        M_deviceShared[ty][tx] = M_device[y * width + (m * BLOCKSIZE + tx)];
-        N_deviceShared[ty][tx] = N_device[(m * BLOCKSIZE + ty)* width + x];
+        M_deviceShared[ty][tx] = M_device[y * width + (m * BLOCKSIZE + tx)];   // 坐标都是y*width + x  变化值为x
+        N_deviceShared[ty][tx] = N_device[(m * BLOCKSIZE + ty)* width + x];    // 坐标都是y*width + x  变化值为y
         __syncthreads();
 
         for (int k = 0; k < BLOCKSIZE; k ++) {
