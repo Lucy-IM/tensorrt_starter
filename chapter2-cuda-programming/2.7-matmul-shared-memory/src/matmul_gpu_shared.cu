@@ -49,12 +49,12 @@ __global__ void MatmulSharedDynamicKernel(float *M_device, float *N_device, floa
     /* 
         对于x和y, 根据blockID, tile大小和threadID进行索引
     */
-    int x = blockIdx.x * blockSize + threadIdx.x;
+    int x = blockIdx.x * blockSize + threadIdx.x;   //和int x = blockIdx.x * blockDim.x + threadIdx.x;等价
     int y = blockIdx.y * blockSize + threadIdx.y;
 
     float P_element = 0.0;
 
-    int ty = threadIdx.y;
+    int ty = threadIdx.y;    // 这个是一个block中的线程相对id；
     int tx = threadIdx.x;
     /* 对于每一个P的元素，我们只需要循环遍历width / tile_width 次就okay了 */
     for (int m = 0; m < width / blockSize; m ++) {
